@@ -2,7 +2,7 @@ import tensorflow as tf
 
 _EPSILON = tf.keras.backend.epsilon()
 
-
+# Classification
 def focal_loss(alpha, gamma):
     def focal_loss_fixed(y_true, y_pred):
         pos_mask = tf.cast(tf.equal(y_true, 1.0), tf.float32)
@@ -36,7 +36,7 @@ def smooth_L1_unmasked(sigma):
 
     return _smooth_L1_unmasked
 
-
+# Regression
 def smooth_L1_masked(sigma):
     _unmasked_fn = smooth_L1_unmasked(sigma)
 

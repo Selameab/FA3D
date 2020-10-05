@@ -105,7 +105,7 @@ def project_box_3D(P, box: Box3D) -> Box2D:
     corners = transforms_3D.project(P, corners)
     x1, y1 = np.min(corners, axis=1)
     x2, y2 = np.max(corners, axis=1)
-    x1, y1, x2, y2 = max(x1, 0), max(y1, 0),  min(x2, 1241), min(y2, 374)  # Bound to image
+    x1, y1, x2, y2 = max(x1, 0), max(y1, 0), min(x2, 1241), min(y2, 374)  # Bound to image
     # x1, x2 = np.clip([x1, x2], 0, 1241)
     # y1, y2 = np.clip([y1, y2], 0, 374)
     return Box2D((x1, y1, x2, y2), mode=CORNER_CORNER, cls=box.cls, confidence=box.confidence, text=box.text)
@@ -119,27 +119,3 @@ def get_box_difficulty(box2D, box3D):
     elif box2D.h >= 25 and box3D.occluded <= 3 and box3D.truncated <= 0.5:
         return DIFFICULTY.HARD
     return DIFFICULTY.UNK
-
-
-def compare_boxes(box1, box2):
-    if isinstance(box1, Box3D):
-        return box1.h == box2.h and box1.w == box2.w and box1.l == box2.l and box1.x == box2.x and box1.y == box2.y and box1.z == box2.z and \
-               box1.yaw == box2.yaw
-
-    raise ValueError
-
-# def project_box_3D(P, box: Box3D) -> Box2D:
-#     corners = transforms_3D.project(P, get_corners_3D(box))
-#     x1, y1 = np.min(corners, axis=1)
-#     x2, y2 = np.max(corners, axis=1)
-#     x1, y1, x2, y2 = max(x1, 0), max(y1, 0), min(x2, 1241), min(y2, 374)  # Bound to image
-#     return Box2D((x1, y1, x2, y2), mode=CORNER_CORNER, cls=box.cls, confidence=box.confidence, text=box.text)
-
-
-# def translate_box_3D(box, dx, dy, dz):
-#     return Box3D(box.h, box.w, box.l, box.x + dx, box.y + dy, box.z + dz, box.yaw, box.alpha, box.cls, box.confidence, box.text)
-
-
-# def scale_box_2D(box, scale):
-#     return Box2D((box.x1 * scale[0], box.y1 * scale[1], box.x2 * scale[0], box.y2 * scale[1]), CORNER_CORNER,
-#                  cls=box.cls, confidence=box.confidence, text=box.text)

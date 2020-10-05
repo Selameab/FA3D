@@ -7,7 +7,7 @@ from datasets.kitti.boxes import Box3D, get_corners_3D
 # Physical to Target Axis Mapping
 # X -> Y      Y -> Z      Z -> X
 class ResTargets:
-    def __init__(self, shape, keep_factor, x_range=(-40, 40), z_range=(0, 70.4), anchor_hwly=(1.5, 1.6, 3.9, 1.75), default_class='Car', confidence_thresh=0.05):
+    def __init__(self, shape, keep_factor, x_range=(-40, 40), z_range=(0, 70.4), anchor_hwly=(1.5, 1.6, 3.9, 1.75), default_class='Car', confidence_thresh=0.1):
         self.shape = shape
         self.x_range = x_range
         self.z_range = z_range

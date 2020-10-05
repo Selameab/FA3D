@@ -17,7 +17,7 @@ from datasets.kitti.transforms_3D import transform
 KITTI_COLUMN_NAMES = ['Type', 'Truncated', 'Occluded', 'Alpha', 'X1', 'Y1', 'X2', 'Y2', '3D_H', '3D_W', '3D_L', '3D_X', '3D_Y', '3D_Z', 'Rot_Y', 'Score']
 
 # Dataset path
-KITTI_DIR = 'D:/Datasets/KITTI/training' if os.name == 'nt' else os.path.expanduser('~/datasets/KITTI/training/')
+KITTI_DIR = os.path.expanduser('~/datasets/KITTI/training/')
 CARS_ONLY = {'Car': ['Car']}
 
 
@@ -215,5 +215,3 @@ def _get_calib(path):
                 P2 = np.insert(P2, 3, values=[0, 0, 0, 1], axis=0)  # Add bottom row
 
     return V2C, R0, P2
-
-

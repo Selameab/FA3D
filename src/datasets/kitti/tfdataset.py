@@ -2,7 +2,7 @@ import tensorflow as tf
 
 from datasets.kitti.reader import Reader
 
-
+# For distributed training
 def TFDataset(subset, class_dict, batch_size, velo_encoder, target_encoder, shuffle, aug_fn=None, prefetch=0, num_parallel_calls=4):
     reader = Reader(class_dict)
 

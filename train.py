@@ -23,7 +23,7 @@ target_encoder = ResTargets(shape=(250, 220), keep_factor=0.5, default_class='Ca
 train_ds = TFDataset('train', CARS_ONLY, batch_size=2, velo_encoder=velo_encoder, target_encoder=target_encoder,
                      aug_fn=aug_seq_1(), shuffle=True, prefetch=4, num_parallel_calls=2)
 
-with tf.distribute.MirroredStrategy().scope():
+with tf.distribute.MirroredStrategy().scope():  # Distributed training
     outputs_dir = create_dir('outputs')
     ckpts_dir = create_dir(os.path.join(outputs_dir, 'ckpts'))
     callbacks = [ModelCheckpoint(os.path.join(ckpts_dir, 'E{epoch:04d}.h5'), save_best_only=False, period=20, verbose=True, save_weights_only=True),

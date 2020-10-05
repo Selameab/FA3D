@@ -35,6 +35,8 @@ class OccupancyCuboid:
         return occupancy_grid
 
 
+# Sparse Occupancy Cuboid temporarily removed
+
 def main():
     from datasets.kitti.reader import Reader, CARS_ONLY
 

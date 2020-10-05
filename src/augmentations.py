@@ -1,8 +1,10 @@
-import numpy as np
-from datasets.kitti.kitti_utils import compute_mask_accurate, standardize_angle, compute_mask_estimate, compute_mask_accurate_v2, collision_test
-import random
-from datasets.kitti.transforms_3D import transform, rot_y_matrix, translation_matrix
 import copy
+import random
+
+import numpy as np
+
+from datasets.kitti.transforms_3D import rot_y_matrix
+from datasets.kitti.utils import standardize_angle, compute_mask_accurate_v2, collision_test
 
 
 def per_box_dropout(dropout_ratio=0.1):

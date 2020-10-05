@@ -261,45 +261,6 @@ def collision_test(new_box, existing_boxes):
     return np.any(intersects(existing_lines, new_lines))
 
 
-# Averaging NMS
-def nms_bev_ave(thresh, kernel=dist_bev, max_boxes=50, min_hit=5):  # ~ 20ms
-    def _nms_bev(boxes):
-        boxes.sort(key=lambda box: box.confidence, reverse=True)
-
-        filtered_boxes = []
-        while len(boxes) > 0 and len(filtered_boxes) < max_boxes:
-            top_box = boxes[0]
-            # boxes = np.delete(boxes, 0)  # Remove top box from main list
-            boxes = boxes[1:]
-
-            # Remove all other boxes overlapping with selected box
-            boxes_to_remove = []
-            hits = 0
-            dxs, dys, dzs = [top_box.x], [top_box.y], [top_box.z]
-
-            for box_id in range(len(boxes)):
-                iou = kernel(boxes[box_id], top_box)
-                if iou > thresh:
-                    if iou > -1.0:
-                        dxs += [boxes[box_id].x]
-                        dys += [boxes[box_id].y]
-                        dzs += [boxes[box_id].z]
-
-                    boxes_to_remove += [box_id]
-                    hits += 1
-            boxes = np.delete(boxes, boxes_to_remove)
-
-            # Add box with highest confidence to output list
-            if hits >= min_hit:
-                top_box.x = np.mean(dxs)
-                top_box.y = np.mean(dys)
-                top_box.z = np.mean(dzs)
-                filtered_boxes += [top_box]
-
-        return filtered_boxes
-
-    return _nms_bev
-
 
 # Faster version of nmv_bev (distance based)
 def nms_bev_v3(thresh, pre_count=2500, post_count=50, min_hit=3):
@@ -329,25 +290,6 @@ def nms_bev_v3(thresh, pre_count=2500, post_count=50, min_hit=3):
     return _nms_bev_v3
 
 
-# Returns id of box with highest overlay and iou
-def find_best_match_3d(needle, haystack):
-    if len(haystack) == 0:
-        return 0.0, 0.0
-    ious = [compute_iou_bev_v2(needle, b) for b in haystack]
-    m = np.argmax(ious)
-    return m, ious[m]
-
-
-def compute_iou_rv(box_1, box_2):
-    x1 = max(box_1.x1, box_2.x1)
-    x2 = min(box_1.x2, box_2.x2)
-    y1 = max(box_1.y1, box_2.y1)
-    y2 = min(box_1.y2, box_2.y2)
-    intersection = 0 if (x1 > x2 or y1 > y2) else (x2 - x1) * (y2 - y1)
-    union = ((box_1.x2 - box_1.x1) * (box_1.y2 - box_1.y1)) + ((box_2.x2 - box_2.x1) * (box_2.y2 - box_2.y1)) - intersection
-    return intersection / union
-
-
 def nms_rotated_bev(iou_thresh, pre_count=5000, post_count=200, min_hit=3):
     def _nms_bev_v3(boxes):
         boxes.sort(key=lambda box: box.confidence, reverse=True)
@@ -367,11 +309,3 @@ def nms_rotated_bev(iou_thresh, pre_count=5000, post_count=200, min_hit=3):
         return filtered_boxes
 
     return _nms_bev_v3
-
-
-def is_pt_in_boxes(pt, boxes):
-    x, y = pt
-    for box in boxes:
-        if (box.x1 < x < box.x2) and (box.y1 < y < box.y2):
-            return True
-    return False

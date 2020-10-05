@@ -2,6 +2,7 @@ import tensorflow as tf
 import os
 
 
+# Restricts GPU memory usage
 def allow_growth():
     if tf.__version__.startswith("1"):
         gpu_options = tf.GPUOptions(allow_growth=True)
@@ -17,6 +18,7 @@ def allow_growth():
                 print(e)
 
 
+# Creates directory and returns as string
 def create_dir(d):
     os.makedirs(d, exist_ok=True)
     return d

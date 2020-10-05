@@ -26,6 +26,7 @@ def create_model(input_shape, C, is_train=True, ki='he_normal', kr=None):
         input_layer = tf.keras.layers.Input(shape=input_shape)
         x = input_layer
     else:
+        # Sparse input temporarily removed
         raise NotImplementedError
 
     x1 = _block(x, n_layers=4, filters=C, name='Block1')
